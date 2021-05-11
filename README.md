@@ -1,5 +1,6 @@
-# node-jwt-authentication-api
+a lot of stuff does not work
+use test/test oder kev/kev to login
 
-NodeJS JWT Authentication API
+register works with any username which is not test or kev
 
-For documentation and instructions check out https://jasonwatmore.com/post/2018/08/06/nodejs-jwt-authentication-tutorial-with-example-api
+register does NOT create DB Entries, currently it is only hardcoded users.
