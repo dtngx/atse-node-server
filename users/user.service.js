@@ -1,51 +1,90 @@
 ﻿const config = require('config.json');
 const jwt = require('jsonwebtoken');
-
-// users hardcoded for simplicity, store in a db for production applications
-const users = [{ id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User' }, 
-               { id: 2, username: 'kev', password: 'kev', firstName: 'Kevin', lastName: 'Schwarz' }];
+const db = require('_helpers/db');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
     authenticate,
-    register,
+    create,
+    delete: _delete,
     getAll
 };
 
 async function authenticate({ username, password }) {
-    const user = users.find(u => u.username === username && u.password === password);
 
-    if (!user) throw 'Username or password is incorrect';
+    const user = await db.User.scope('withHash').findOne({ where: { username } });
 
-    // create a jwt token that is valid for 7 days
+    if (!user || !(await bcrypt.compare(password, user.hash)))
+        throw 'Username or password is incorrect';
+
+    // authentication successful
     const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: '7d' });
-
-    return {
-        ...omitPassword(user),
-        token
-    };
+    return { ...omitHash(user.get()), token };
 }
 
-async function register({username}) {
-    const user = users.find(u => u.username === username);
-    var message = {
-        message: "processing..."
+
+//   const user = users.find(u => u.username === username && u.password === password);
+
+//  if (!user) throw 'Username or password is incorrect';
+
+// create a jwt token that is valid for 7 days
+
+//   const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: '7d' });
+
+//   return {
+//      ...omitPassword(user),
+//      token
+//};
+
+//async function register({ username }) {
+//    const user = users.find(u => u.username === username);
+//    var message = {
+//        message: "processing..."
+//    }
+
+//    if (user) throw "User already exists";
+
+//    message = {
+//        message: "success"
+//    }
+//    return message;
+//}
+
+
+async function create(params) {
+    // validate
+    if (await db.User.findOne({ where: { username: params.username } })) {
+        throw 'Username "' + params.username + '" is already taken';
     }
 
-    if (user) throw "User already exists";
-
-    message = {
-        message: "success"
+    // hash password
+    if (params.password) {
+        params.hash = await bcrypt.hash(params.password, 10);
     }
-    return message;
+
+    // save user
+    await db.User.create(params);
 }
+
+async function _delete(id) {
+    const user = await getUser(id);
+    await user.destroy();
+}
+
 
 async function getAll() {
-    return users.map(u => omitPassword(u));
+    return await db.Jobs.findAll();
 }
 
 // helper functions
 
-function omitPassword(user) {
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+async function getUser(id) {
+    const user = await db.User.findByPk(id);
+    if (!user) throw 'User not found';
+    return user;
+}
+
+function omitHash(user) {
+    const { hash, ...userWithoutHash } = user;
+    return userWithoutHash;
 }

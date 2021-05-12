@@ -1,3 +1,10 @@
 ﻿{
+    "database": {
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "19nivek93",
+        "database": "users"
+    },
     "secret": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTYyMDc0NzExMywiZXhwIjoxNjIxMzUxOTEzfQ.fCmH1GOyl9Uz6sYPbkLlCV7jhCWnC-YvDOgKEkZHyFM"
 }
