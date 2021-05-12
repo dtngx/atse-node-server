@@ -1,6 +1,15 @@
-a lot of stuff does not work
-use test/test oder kev/kev to login
+Working Backend
+#To Do:
 
-register works with any username which is not test or kev
+-implement deleting users
+-(implement updating users)
 
-register does NOT create DB Entries, currently it is only hardcoded users.
+- Making a second database for Jobs and adding the option to:
+    -get all jobs
+    -add jobs
+    -delete jobs
+    -(update jobs)
+
+#Working Features:
++ registering new user (POST request to :4000/users/register
++ authenticating a registered user (POST to :4000/user/authenticate
