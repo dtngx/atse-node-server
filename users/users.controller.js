@@ -2,12 +2,14 @@
 const router = express.Router();
 const Joi = require('joi');
 const validateRequest = require('_helpers/validate-request');
+const authorize = require('_helpers/authorize')
 const userService = require('./user.service');
 
 // routes
 router.post('/authenticate', authenticateSchema, authenticate);
 router.post('/register', registerSchema, register);
 router.get('/jobs', getAll);
+router.delete('/:id', authorize(), _delete);
 
 module.exports = router;
 
@@ -44,5 +46,11 @@ function register(req, res, next) {
 function getAll(req, res, next) {
     userService.getAll()
         .then(users => res.json(users))
+        .catch(next);
+}
+
+function _delete(req, res, next) {
+    userService.delete(req.params.id)
+        .then(() => res.json({ message: 'User deleted successfully' }))
         .catch(next);
 }
