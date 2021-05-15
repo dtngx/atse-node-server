@@ -8,7 +8,7 @@ const userService = require('./user.service');
 // routes
 router.post('/authenticate', authenticateSchema, authenticate);
 router.post('/register', registerSchema, register);
-router.get('/jobs', getAll);
+router.get('/users', getAll);
 router.delete('/:id', authorize(), _delete);
 
 module.exports = router;
