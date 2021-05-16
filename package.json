@@ -1,12 +1,7 @@
 {
-    "name": "node-jwt-authentication-api",
+    "name": "odd-job-platform-server",
     "version": "1.0.0",
-    "description": "NodeJS JWT Authentication API",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/cornflourblue/node-jwt-authentication-api.git"
-    },
+    "description": "Odd Job Platform Server",
     "scripts": {
         "start": "node ./server.js",
         "start:dev": "nodemon ./server.js"
